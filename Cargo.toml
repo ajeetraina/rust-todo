@@ -8,3 +8,8 @@ edition = "2021"
 [dependencies]
 actix-web = "4.2.1"
 actix-rt = "2.6.0"
+thiserror = "1.0.37"
+askama = "0.11.1"
+rusqlite = { version = "0.28.0", features = ["bundled"] }
+r2d2 = "0.8.10"
+r2d2_sqlite = "0.21.0"
