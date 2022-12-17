@@ -8,9 +8,6 @@ use rusqlite::params;
 
 use serde::Deserialize;
 
-pub(crate) use env_logger;
-// use actix_web::middleware::Logger;
-
 
 #[derive(Deserialize)]
 struct AddParams {
@@ -90,15 +87,6 @@ async fn index(db: web::Data<Pool<SqliteConnectionManager>>) -> Result<HttpRespo
 	for row in rows {
 		entries.push(row?);
 	}
-	// entries.push(TodoEntry{
-	// 	id: 1,
-	// 	text: "First entry".to_string(),
-	// });
-
-	// entries.push(TodoEntry {
-	// 	id: 2,
-	// 	text: "Second entry".to_string(),
-	// });
 
 	let html = IndexTemplate{ entries };
 
@@ -112,11 +100,6 @@ async fn index(db: web::Data<Pool<SqliteConnectionManager>>) -> Result<HttpRespo
 
 #[actix_rt::main]
 async fn main() -> Result<(), actix_web::Error> {
-	std::env::set_var("RUST_LOG", "info");
-	env_logger::init();
-
-	// debug!("debugです");
-
 	let manager = SqliteConnectionManager::file("todo.db");
 
 	let pool = Pool::new(manager).expect("Failed to initialize the connection pool.");
@@ -134,8 +117,6 @@ async fn main() -> Result<(), actix_web::Error> {
 		.expect("Failed to create a table `todo`.");
 
 	HttpServer::new(move || App::new()
-		// .middleware(Logger::default())
-		// .middleware(Logger::new("%a %{User-Agent}i"))
 		.service(index)
 		.service(add_todo)
 		.service(delete_todo)
